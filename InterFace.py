@@ -33,12 +33,13 @@ def timme(a):
 
 head = ['date','ans1','ans2','ans3','ans4','ans5','ans6','time','weight','opinion']
 df = pd.DataFrame(columns=head)
-if os.path.isfile('ans1.csv') == False:
-    df.to_csv('ans1.csv', encoding='utf-8-sig', header = head, index = False, sep = ';')
 
+@st.cache
+def frame():
+    df.loc[len(df.index)] = [dttime, ans1, ans2, ans3, ans4, ans5, ans6, time, weight/5, ans7]
+    df.dropna(axis=0, inplace=True)
 
 st.title('Emotional View')
-
 with st.form("my_form", clear_on_submit = True):
     k1, k2 = st.columns(2)
     with k1:
@@ -99,17 +100,12 @@ if upload:
         else:
             weight += 0
     
-    df.loc[len(df.index)] = [dttime, ans1, ans2, ans3, ans4, ans5, ans6, time, weight/5, ans7]
-    df.dropna(axis=0, inplace=True)
+    df = frame()
 
     #df.to_csv('ans.csv',encoding='utf-8-sig', header = head, index = False, sep = ';')
     
-    with open('ans1.csv','a', newline='', encoding='utf-8-sig',) as csvfile:
-        writer = csv.writer(csvfile, delimiter = ';')
-        writer.writerow([dttime, ans1, ans2, ans3, ans4, ans5, ans6, time, weight/5, ans7])
-    
 with st.expander(""):   
-    df1 = pd.read_csv('ans1.csv', encoding='utf-8-sig', sep=';')
-    st.write(df1)
+    #f1 = pd.read_csv('ans1.csv', encoding='utf-8-sig', sep=';')
+    st.write(df)
  
 
