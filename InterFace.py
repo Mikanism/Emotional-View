@@ -30,16 +30,15 @@ def timme(a):
 
 #-------------------------------------------#
 
-
 head = ['date','ans1','ans2','ans3','ans4','ans5','ans6','time','weight','opinion']
 df = pd.DataFrame(columns=head)
+if os.path.isfile('ans1.csv') == False:
+    df.to_csv('ans1.csv', encoding='utf-8-sig', header = head, index = False, sep = ';')
 
-@st.cache
-def frame():
-    df.loc[len(df.index)] = [dttime, ans1, ans2, ans3, ans4, ans5, ans6, time, weight/5, ans7]
-    df.dropna(axis=0, inplace=True)
+
 
 st.title('Emotional View')
+
 with st.form("my_form", clear_on_submit = True):
     k1, k2 = st.columns(2)
     with k1:
@@ -85,7 +84,7 @@ with st.form("my_form", clear_on_submit = True):
     ans1, ans2, ans3, ans4, ans5, ans6 = q3, q4, q5, q6, q7, q8
     ans7 = q9
     
-    upload = st.form_submit_button("Загрузить")
+    upload = st.form_submit_button("Cохранить")
 
 if upload:
     weight = 0
@@ -100,12 +99,26 @@ if upload:
         else:
             weight += 0
     
-    df = frame()
+    df.loc[len(df.index)] = [dttime, ans1, ans2, ans3, ans4, ans5, ans6, time, weight/5, ans7]
+    df.dropna(axis=0, inplace=True)
 
     #df.to_csv('ans.csv',encoding='utf-8-sig', header = head, index = False, sep = ';')
     
+    with open('ans1.csv','a', newline='', encoding='utf-8-sig',) as csvfile:
+        writer = csv.writer(csvfile, delimiter = ';')
+        writer.writerow([dttime, ans1, ans2, ans3, ans4, ans5, ans6, time, weight/5, ans7])
+    
 with st.expander(""):   
-    #f1 = pd.read_csv('ans1.csv', encoding='utf-8-sig', sep=';')
-    st.write(df)
- 
+    st.write(pd.read_csv('ans1.csv', encoding='utf-8-sig', sep=';'))
+
+@st.cache
+def convert_df(df):
+    return df.to_csv(header = head, index = False, sep = ';').encode('utf-8-sig')
+
+data1 = convert_df(pd.read_csv('ans1.csv',sep=';'))
+st.sidebar.download_button(
+    'Скачать',
+    data = data1,
+    file_name='ans1.csv',
+    on_click= df.to_csv('ans1.csv', encoding='utf-8-sig', header = head, index = False, sep = ';'))
 
