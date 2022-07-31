@@ -186,7 +186,7 @@ with st.sidebar:
             on_click= df.to_csv('ans1.csv', encoding='utf-8-sig', header = head, index = False, sep = ';'))
     
     with tab2:
-        st.header('Для совмещения файлов выерете 2 файла и нажмите на кнопку')
+        st.header('Для совмещения файлов выберите 2 файла')
         uploaded_file = st.file_uploader("Выберите первый файл")
         if uploaded_file is not None:
 
