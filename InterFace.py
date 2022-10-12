@@ -187,14 +187,14 @@ with st.sidebar:
     
     with tab2:
         st.header('Для совмещения файлов выберите 2 файла')
-        uploaded_file = st.file_uploader("Выберите первый файл")
+        uploaded_file = st.file_uploader("Выберите файл c результатами анкеты")
         if uploaded_file is not None:
 
             # Can be used wherever a "file-like" object is accepted:
             data_ans = pd.read_csv(uploaded_file, sep = ";")
             #st.write(data_ans)
         
-        uploaded_file1 = st.file_uploader("Выберите второй файл")
+        uploaded_file1 = st.file_uploader("Выберите файл с результатами нейросети")
         if uploaded_file1 is not None:
 
             # Can be used wherever a "file-like" object is accepted:
